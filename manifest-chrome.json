@@ -1,0 +1,41 @@
+{
+    "manifest_version": 3,
+    "name": "AltMagick",
+    "short_name": "AltMagick",
+    "version": "1.0.0",
+    "author": "Gaëtan LE HEURT-FINOT",
+    "description": "Generate alt text for images like a magician.",
+    "homepage_url": "https://altmagick.com/",
+    "options_ui": {
+        "page": "dashboard.html",
+        "open_in_tab": true
+    },
+    "minimum_chrome_version": "116",
+    "permissions": [
+        "contextMenus",
+        "storage",
+        "offscreen",
+        "clipboardWrite",
+        "notifications"
+    ],
+    "action": {
+        "default_icon": {
+            "32": "img/icon32.png",
+            "48": "img/icon48.png",
+            "128": "img/icon128.png"
+        },
+        "default_title": "AltMagick - Generate alt text for images like a magician",
+        "default_popup": "popup.html"
+    },
+    "host_permissions": [
+        "https://api.altmagick.com/*"
+    ],
+    "background": {
+        "service_worker": "js/background.js"
+    },
+    "icons": {
+        "32": "img/icon32.png",
+        "48": "img/icon48.png",
+        "128": "img/icon128.png"
+    }
+}

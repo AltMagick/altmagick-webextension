@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="h-100" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <title>AltMagick</title>
+    <meta content="Generate alt text like a magician" name="description">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="img/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+    <link href="img/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+    <meta content="AltMagick" name="application-name"/>
+    <meta content="AltMagick" name="apple-mobile-web-app-title"/>
+    <link href="img/android-chrome-36x36.png" rel="icon" sizes="36x36" type="image/png"/>
+    <link href="img/android-chrome-48x48.png" rel="icon" sizes="48x48" type="image/png"/>
+    <link href="img/android-chrome-72x72.png" rel="icon" sizes="72x72" type="image/png"/>
+    <link href="img/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="img/android-chrome-144x144.png" rel="icon" sizes="144x144" type="image/png"/>
+    <link href="img/android-chrome-192x192.png" rel="icon" sizes="192x192" type="image/png"/>
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon" sizes="57x57">
+    <link href="img/apple-touch-icon-60x60.png" rel="apple-touch-icon" sizes="60x60"/>
+    <link href="img/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72"/>
+    <link href="img/apple-touch-icon-76x76.png" rel="apple-touch-icon" sizes="76x76"/>
+    <link href="img/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114"/>
+    <link href="img/apple-touch-icon-120x120.png" rel="apple-touch-icon" sizes="120x120"/>
+    <link href="img/apple-touch-icon-152x152.png" rel="apple-touch-icon" sizes="152x152"/>
+    <link href="img/apple-touch-icon-180x180.png" rel="apple-touch-icon" sizes="180x180"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="spinner-container">
+    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+        <div class="spinner" role="status">
+            <svg viewBox="0 0 16 16" xmlns="http:/www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="7"></circle>
+            </svg>
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+<section id="main">
+    <div class="container h-100">
+        <header class="d-flex flex-wrap justify-content-center py-2 mb-4 border-bottom">
+                <span class="d-flex align-items-center text-decoration-none">
+                    <img alt="icon" class="me-1" height="40" src="img/icon128.png" width="40">
+                    <span class="fs-4" id="name"></span>
+                </span>
+        </header>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow mb-3 p-3">
+                    <div class="pb-4">
+                        <h3 class="p-0 m-0">Settings</h3>
+                        <span class="text-muted">Configure the AltMagick license key to be used and the transcription language</span>
+                    </div>
+                    <form class="row g-3 needs-validation" novalidate></form>
+                    <div class="form-floating mb-1 pb-1">
+                        <input class="form-control" id="licenseInput" name="licenseInput" placeholder="Your license key"
+                               required type="text">
+                        <label for="licenseInput">Your license key</label>
+                    </div>
+                    <div class="form-floating mb-1 pb-1">
+                        <select class="form-select" id="languageSelect" name="languageSelect" required>
+                            <option value="browser">Browser language</option>
+                            <option value="ar">Arabic</option>
+                            <option value="bn">Bengali</option>
+                            <option value="bg">Bulgarian</option>
+                            <option value="zh-CN">Chinese (Simplified)</option>
+                            <option value="zh-TW">Chinese (Traditional)</option>
+                            <option value="hr">Croatian</option>
+                            <option value="cs">Czech</option>
+                            <option value="da">Danish</option>
+                            <option value="nl">Dutch</option>
+                            <option value="en">English</option>
+                            <option value="et">Estonian</option>
+                            <option value="fa">Farsi</option>
+                            <option value="fi">Finnish</option>
+                            <option value="fr">French</option>
+                            <option value="de">German</option>
+                            <option value="el">Greek</option>
+                            <option value="gu">Gujarati</option>
+                            <option value="he">Hebrew</option>
+                            <option value="hi">Hindi</option>
+                            <option value="hu">Hungarian</option>
+                            <option value="id">Indonesian</option>
+                            <option value="it">Italian</option>
+                            <option value="ja">Japanese</option>
+                            <option value="kn">Kannada</option>
+                            <option value="ko">Korean</option>
+                            <option value="lv">Latvian</option>
+                            <option value="lt">Lithuanian</option>
+                            <option value="ml">Malayalam</option>
+                            <option value="mr">Marathi</option>
+                            <option value="ms">Malay</option>
+                            <option value="no">Norwegian</option>
+                            <option value="pl">Polish</option>
+                            <option value="pt">Portuguese</option>
+                            <option value="ro">Romanian</option>
+                            <option value="ru">Russian</option>
+                            <option value="sr">Serbian</option>
+                            <option value="sk">Slovak</option>
+                            <option value="sl">Slovenian</option>
+                            <option value="es">Spanish</option>
+                            <option value="sw">Swahili</option>
+                            <option value="sv">Swedish</option>
+                            <option value="ta">Tamil</option>
+                            <option value="te">Telugu</option>
+                            <option value="th">Thai</option>
+                            <option value="tr">Turkish</option>
+                            <option value="uk">Ukrainian</option>
+                            <option value="ur">Urdu</option>
+                            <option value="vi">Vietnamese</option>
+                        </select>
+                        <label for="languageSelect">Language used for transcription</label>
+                    </div>
+                    <button class="btn btn-secondary" id="btn-save" type="button">Save</button>
+                    </form>
+                </div>
+                <div class="card shadow p-3">
+                    <div class="pb-4">
+                        <h3 class="p-0 m-0">How to use</h3>
+                        <span class="text-muted">A short demonstration of how AltMagick works</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-none card mb-3 p-3 shadow" id="subscriptionInfo">
+                    <div class="mb-2">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <h3 class="d-flex flex-fill m-0 p-0">Your subscription</h3>
+                            <button class="d-flex btn btn-secondary btn-sm" id="reloadSubscriptionInfoBtn"
+                                    type="button">
+                                <svg class="bi bi-arrow-clockwise" fill="currentColor" height="16" viewBox="0 0 16 16"
+                                     width="16" xmlns="http:/www.w3.org/2000/svg">
+                                    <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                                          fill-rule="evenodd"/>
+                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="text-muted">Get details about your subscription</span>
+                    </div>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <td>Name:</td>
+                            <td id="userName"></td>
+                        </tr>
+                        <tr>
+                            <td>E-mail:</td>
+                            <td id="userEmail"></td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td id="status"></td>
+                        </tr>
+                        <tr>
+                            <td>Next renew:</td>
+                            <td id="renewsAt"></td>
+                        </tr>
+                        <tr>
+                            <td>Ends at:</td>
+                            <td id="endAt"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a class="btn btn-secondary" href="https:/buy.altmagick.com/billing/" target="_blank"
+                       type="button">Manage your subscription</a>
+                </div>
+                <div class="d-none card shadow mb-3 p-3" id="usageInfo">
+                    <div class="mb-2">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <h3 class="d-flex flex-fill m-0 p-0">Your usage</h3>
+                            <button class="d-flex btn btn-secondary btn-sm" id="reloadUsageInfoBtn" type="button">
+                                <svg class="bi bi-arrow-clockwise" fill="currentColor" height="16" viewBox="0 0 16 16"
+                                     width="16" xmlns="http:/www.w3.org/2000/svg">
+                                    <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                                          fill-rule="evenodd"/>
+                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="text-muted">A quick look at your usage this month</span>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="progress-circle">
+                            <svg class="progress-ring" height="120" width="120">
+                                <circle class="progress-ring__background" cx="60" cy="60"
+                                        fill="transparent" r="58" stroke="white" stroke-width="4"></circle>
+                                <circle class="progress-ring__circle" cx="60" cy="60" fill="transparent"
+                                        r="58" stroke="black" stroke-width="4"></circle>
+                            </svg>
+                            <span class="progress-content"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-none card shadow p-3 mb-3" id="welcome">
+                    <div class="mb-2">
+                        <h3 class="d-flex flex-fill m-0 p-0">Welcome to AltMagick!</h3>
+                        <span class="text-muted">A pleasure to meet you</span>
+                    </div>
+                    <p>To use AltMagick, you need a licence.<br>You don't have one?<br>Don't worry, buying an AltMagick
+                        licence is simple and affordable.</p>
+                    <a class="btn btn-secondary" href="https:/altmagick.com/" target="_blank"
+                       type="button">Buy a license</a>
+                </div>
+                <div class="card shadow p-3" id="help">
+                    <div class="mb-2">
+                        <h3 class="d-flex flex-fill m-0 p-0">Need help?</h3>
+                        <span class="text-muted">We are here to help you</span>
+
+                    </div>
+                    <span>If something does not work, or if you have a question, do not hesitate to contact us via our <a
+                            href="https://altmagick.com">website</a> or by <a
+                            href="mailto:gaetan@altmagick.com">e-mail</a>.</span>
+                </div>
+            </div>
+        </div>
+        <footer class="py-2 mt-4 border-top">
+            <p class="text-center text-body-secondary m-0">AltMagick WebExt v<span id="version"></span> on <span
+                    id="browser"></span><br>
+                <a href="https://altmagick.com/legal.pdf">Legals</a> - <a
+                        href="https://altmagick.com/terms.pdf">Terms</a> - <a href="https://altmagick.com/privacy.pdf">Privacy</a>
+            </p>
+        </footer>
+    </div>
+</section>
+<div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-bottom-0">
+                <h1 class="modal-title fs-5" id="modalTitle"></h1>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body py-0">
+                <p id="modalContent"></p>
+            </div>
+            <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                <button class="btn btn-lg btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/bootstrap.min.js"></script>
+<script defer src="js/dashboard.js"></script>
+</body>
+</html>

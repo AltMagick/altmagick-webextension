@@ -1,0 +1,105 @@
+body {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgNDAwIDQwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8yMF84NikiPgogICAgICAgIDxnIGZpbHRlcj0idXJsKCNmaWx0ZXIwX2ZfMjBfODYpIj4KICAgICAgICAgICAgPHBhdGggZD0iTTEyOC42IDBIMFYzMjIuMkwxMDYuMiAxMzQuNzVMMTI4LjYgMFoiIGZpbGw9IiNGRjAwQjgiPjwvcGF0aD4KICAgICAgICAgICAgPHBhdGggZD0iTTAgMzIyLjJWNDAwSDI0MEgzMjBMMTA2LjIgMTM0Ljc1TDAgMzIyLjJaIiBmaWxsPSIjRkZCODAwIj48L3BhdGg+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0zMjAgNDAwSDQwMFY3OC43NUwxMDYuMiAxMzQuNzVMMzIwIDQwMFoiIGZpbGw9IiNDOEYxQjUiPjwvcGF0aD4KICAgICAgICAgICAgPHBhdGggZD0iTTQwMCAwSDEyOC42TDEwNi4yIDEzNC43NUw0MDAgNzguNzVWMFoiIGZpbGw9IiMwMDM3RkYiPjwvcGF0aD4KICAgICAgICA8L2c+CiAgICA8L2c+CiAgICA8ZGVmcz4KICAgICAgICA8ZmlsdGVyIGlkPSJmaWx0ZXIwX2ZfMjBfODYiIHg9Ii0xNTkuOTMzIiB5PSItMTU5LjkzMyIgd2lkdGg9IjcxOS44NjciIGhlaWdodD0iNzE5Ljg2NyIgZmlsdGVyVW5pdHM9InVzZXJTcGFjZU9uVXNlIiBjb2xvci1pbnRlcnBvbGF0aW9uLWZpbHRlcnM9InNSR0IiPgogICAgICAgICAgICA8ZmVGbG9vZCBmbG9vZC1vcGFjaXR5PSIwIiByZXN1bHQ9IkJhY2tncm91bmRJbWFnZUZpeCI+PC9mZUZsb29kPgogICAgICAgICAgICA8ZmVCbGVuZCBtb2RlPSJub3JtYWwiIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9IkJhY2tncm91bmRJbWFnZUZpeCIgcmVzdWx0PSJzaGFwZSI+PC9mZUJsZW5kPgogICAgICAgICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI3OS45NjY3IiByZXN1bHQ9ImVmZmVjdDFfZm9yZWdyb3VuZEJsdXJfMjBfODYiPjwvZmVHYXVzc2lhbkJsdXI+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+Cjwvc3ZnPgo=") no-repeat;
+    background-size: cover;
+    backdrop-filter: blur(6px);
+    background-attachment: fixed;
+    border: none;
+}
+
+.spinner-container {
+    position: fixed;
+    visibility: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    opacity: 0;
+}
+
+.spinner-spin {
+    width: 3rem;
+    height: 3rem;
+}
+
+.rotate {
+    animation: rotate 1s infinite linear;
+}
+
+.progress-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.progress-ring__background {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.progress-ring__circle {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.progress-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    text-align: center;
+}
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-accent-bg: transparent;
+}
+
+.table > :not(caption) > * > * {
+    color: white;
+}
+
+.spinner {
+    width: 3rem;
+    height: 3rem;
+    display: inline-flex;
+    vertical-align: middle;
+    animation: spinner-spin-keyframe 0.86s cubic-bezier(0.4, 0.15, 0.6, 0.85) infinite;
+    transform-origin: center center;
+}
+
+.spinner > svg {
+    width: 100%;
+    height: 100%;
+    animation: spinner-spin-rotate-keyframe 1s ease-in-out 1 forwards;
+}
+
+.spinner > svg circle {
+    stroke: currentColor;
+    fill: none;
+    stroke-dasharray: 60;
+    stroke-dashoffset: inherit;
+    stroke-linecap: round;
+    stroke-width: 1.5;
+}
+
+@keyframes spinner-spin-keyframe {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinner-spin-rotate-keyframe {
+    0% {
+        transform: rotate(50deg);
+        opacity: 0;
+        stroke-dashoffset: 60;
+    }
+
+    100% {
+        transform: rotate(230deg);
+        opacity: 1;
+        stroke-dashoffset: 50;
+    }
+}

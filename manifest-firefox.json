@@ -1,0 +1,41 @@
+{
+    "manifest_version": 2,
+    "name": "AltMagick",
+    "short_name": "AltMagick",
+    "version": "1.0.0",
+    "description": "Generate alt text for images like a magician.",
+    "homepage_url": "https://altmagick.com/",
+    "options_ui": {
+        "open_in_tab": true,
+        "page": "dashboard.html"
+    },
+    "minimum_chrome_version": "116",
+    "permissions": [
+        "contextMenus",
+        "storage",
+        "clipboardWrite",
+        "notifications",
+        "webRequest",
+        "*://api.altmagick.com/*"
+    ],
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ],
+        "persistent": false
+    },
+    "browser_action": {
+        "default_icon": {
+            "16": "img/icon16.png",
+            "48": "img/icon48.png",
+            "128": "img/icon128.png"
+        },
+        "default_title": "AltMagick - Generate alt text for images like a magician",
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "16": "img/icon16.png",
+        "48": "img/icon48.png",
+        "128": "img/icon128.png"
+    }
+}
