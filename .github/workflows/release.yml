@@ -1,5 +1,3 @@
-name: Create Release and Upload Assets
-
 on:
   push:
     branches:
@@ -13,42 +11,24 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Generate zip files
         run: bash generate.sh
 
       - name: Set tag name
-        id: tag_name
-        run: echo "::set-output name=tag::${GITHUB_REF#refs/tags/}"
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.tag_name.outputs.tag }}
-          release_name: Release ${{ steps.tag_name.outputs.tag }}
+          tag_name: ${{ env.TAG_NAME }}
+          name: Release ${{ env.TAG_NAME }}
           draft: false
           prerelease: false
-
-      - name: Upload Chrome Extension
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./altmagick_chrome_${{ steps.tag_name.outputs.tag }}.zip
-          asset_name: altmagick_chrome_${{ steps.tag_name.outputs.tag }}.zip
-          asset_content_type: application/zip
-
-      - name: Upload Firefox Extension
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./altmagick_firefox_${{ steps.tag_name.outputs.tag }}.zip
-          asset_name: altmagick_firefox_${{ steps.tag_name.outputs.tag }}.zip
-          asset_content_type: application/zip
+          files: |
+            ./altmagick_chrome_${{ env.TAG_NAME }}.zip
+            ./altmagick_firefox_${{ env.TAG_NAME }}.zip
