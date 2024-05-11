@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "AltMagick",
     "short_name": "AltMagick",
-    "version": "1.0.1",
+    "version": "1.1.2",
     "author": "Gaëtan LE HEURT-FINOT",
     "description": "Generate alt text for images like a magician.",
     "homepage_url": "https://altmagick.com/",
