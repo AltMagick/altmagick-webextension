@@ -11,9 +11,9 @@ if [ -f altmagick_firefox_*.zip ]; then
 fi
 
 cp manifest-chrome.json manifest.json
-zip -r altmagick_chrome_$commit_tag.zip css/ img/ js/ copy.html dashboard.html favicon.ico manifest.json popup.html
+zip -r altmagick_chrome_$commit_tag.zip css/ img/ js/ vid/ copy.html dashboard.html favicon.ico manifest.json popup.html
 rm manifest.json
 
 cp manifest-firefox.json manifest.json
-zip -r altmagick_firefox_$commit_tag.zip css/ img/ js/ copy.html dashboard.html favicon.ico manifest.json popup.html
+zip -r altmagick_firefox_$commit_tag.zip css/ img/ js/ vid/ copy.html dashboard.html favicon.ico manifest.json popup.html
 rm manifest.json
