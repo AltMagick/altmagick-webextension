@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "AltMagick",
     "short_name": "AltMagick",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Gaëtan LE HEURT-FINOT",
     "description": "Generate alt text for images like a magician.",
     "homepage_url": "https://altmagick.com/",
@@ -16,7 +16,9 @@
         "storage",
         "offscreen",
         "clipboardWrite",
-        "notifications"
+        "notifications",
+        "activeTab",
+        "scripting"
     ],
     "action": {
         "default_icon": {
@@ -31,7 +33,8 @@
         "https://api.altmagick.com/*"
     ],
     "background": {
-        "service_worker": "js/background.js"
+        "service_worker": "js/background.js",
+        "type": "module"
     },
     "icons": {
         "32": "img/icon32.png",
