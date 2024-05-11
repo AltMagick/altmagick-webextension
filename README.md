@@ -1,2 +1,2 @@
-# generaltor-webextension
+# altmagick-webextension
  
