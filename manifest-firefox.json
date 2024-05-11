@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "AltMagick",
     "short_name": "AltMagick",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Generate alt text for images like a magician.",
     "homepage_url": "https://altmagick.com/",
     "options_ui": {
@@ -16,6 +16,8 @@
         "clipboardWrite",
         "notifications",
         "webRequest",
+        "activeTab",
+        "content_scripts",
         "*://api.altmagick.com/*"
     ],
     "background": {
