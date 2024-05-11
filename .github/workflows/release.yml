@@ -16,8 +16,8 @@ jobs:
       - name: Generate zip files
         run: bash generate.sh
 
-      - name: Set tag name
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Set release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
@@ -25,10 +25,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          name: Release ${{ env.TAG_NAME }}
+          tag_name: ${{ env.RELEASE_VERSION }}
+          name: Release ${{ env.RELEASE_VERSION }}
           draft: false
           prerelease: false
           files: |
-            ./altmagick_chrome_${{ env.TAG_NAME }}.zip
-            ./altmagick_firefox_${{ env.TAG_NAME }}.zip
+            ./altmagick_chrome_${{ env.RELEASE_VERSION }}.zip
+            ./altmagick_firefox_${{ env.RELEASE_VERSION }}.zip
