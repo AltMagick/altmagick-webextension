@@ -32,15 +32,21 @@ async function setupOffscreenDocument(path) {
     }
 }
 
-async function generateAltText(imageUrl, licenseKey, language) {
+async function generateAltText(imageUrl, sourceUrlIfBlob, licenseKey, language) {
     const localData = await new Promise(resolve =>
-        chrome.storage.local.get('imageAltDB', resolve)
+        chrome.storage.local.get("imageAltDB", resolve)
     );
 
     let localDataValue = localData.imageAltDB || {};
 
-    if (imageUrl in localDataValue) {
-        return localDataValue[imageUrl];
+    if (sourceUrlIfBlob !== null) {
+        if (sourceUrlIfBlob in localDataValue) {
+            return localDataValue[sourceUrlIfBlob];
+        }
+    } else {
+        if (imageUrl in localDataValue) {
+            return localDataValue[imageUrl];
+        }
     }
 
     const url = "https://api.altmagick.com/api/v1/analyse";
@@ -62,7 +68,11 @@ async function generateAltText(imageUrl, licenseKey, language) {
     } else {
         const altText = responseData.data.analyseText;
         const imagesdbTemp = (localData.imageAltDB || {});
-        imagesdbTemp[imageUrl] = altText;
+        if (sourceUrlIfBlob !== null) {
+            imagesdbTemp[sourceUrlIfBlob] = altText;
+        } else {
+            imagesdbTemp[imageUrl] = altText;
+        }
 
         if (Object.keys(imagesdbTemp).length >= 100) {
             const oldestImageUrl = Object.keys(imagesdbTemp)[0];
@@ -75,13 +85,13 @@ async function generateAltText(imageUrl, licenseKey, language) {
     }
 }
 
-async function initGenerateAltText(imageUrl) {
+async function initGenerateAltText(imageUrl, sourceUrlIfBlob) {
     chrome.storage.local.get(["licenseKey", "language"], async function (items) {
         if (items.licenseKey && (items.licenseKey !== "")) {
             if (items.language === "browser") {
                 items.language = chrome.i18n.getUILanguage();
             }
-            var response = await generateAltText(imageUrl, items.licenseKey, items.language);
+            var response = await generateAltText(imageUrl, sourceUrlIfBlob, items.licenseKey, items.language);
             if (response.error) {
                 showErrorNotification(response.error.message, false);
                 return;
@@ -119,8 +129,9 @@ function showErrorNotification(message, optionsLink) {
         "message": message,
         "iconUrl": chrome.runtime.getURL("img/icon128.png"),
         "title": "AltMagick: error",
+
     }
-    handleNotif = function (id) {
+    let handleNotif = function (id) {
         chrome.notifications.onClicked.addListener(function (id) {
             if (optionsLink) {
                 chrome.runtime.openOptionsPage();
@@ -138,9 +149,122 @@ chrome.contextMenus.create({
 
 chrome.contextMenus.onClicked.addListener(async function (info, tab) {
     if (info.menuItemId === "generate-alt-text") {
-        initGenerateAltText(info.srcUrl);
+        const executeScriptOptions = {
+            code: `(${async (info) => {
+                return new Promise(async (resolve, reject) => {
+
+                    const imageUrl = info.srcUrl;
+                    const imageElement = document.querySelector(`img[src="${imageUrl}"]`);
+                    if (!imageElement) {
+                        reject(new Error("Image element not found"));
+                        return;
+                    }
+
+                    const response = await fetch(imageUrl);
+                    const blob = await response.blob();
+                    const arrayBuffer = await blob.arrayBuffer();
+
+                    let binary = "";
+                    const bytes = new Uint8Array(arrayBuffer);
+                    const len = bytes.byteLength;
+                    for (let i = 0; i < len; i++) {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+                    const base64Data = `data:${blob.type};base64,${window.btoa(binary)}`;
+
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement("canvas");
+                        const ctx = canvas.getContext("2d");
+
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+
+                        ctx.drawImage(img, 0, 0);
+
+                        const compressedImage = canvas.toDataURL("image/jpeg", 0.7);
+                        resolve(compressedImage);
+                    };
+                    img.src = base64Data;
+                });
+            }})(${JSON.stringify(info)})`
+        };
+
+
+        if (isFirefox) {
+            browser.tabs.executeScript(tab.id, executeScriptOptions)
+                .then(async injectionResults => {
+                    if (chrome.runtime.lastError) {
+                        showErrorNotification("An error occured", false)
+                    } else {
+                        const result = injectionResults[0];
+                        if (result) {
+                            await initGenerateAltText(result, info.srcUrl);
+                        } else {
+                            showErrorNotification("An error occured", false)
+                        }
+                    }
+                });
+        } else {
+            chrome.scripting.executeScript({
+                target: {tabId: tab.id, allFrames: true},
+                func: async (info) => {
+                    return new Promise(async (resolve, reject) => {
+                        const imageUrl = info.srcUrl;
+                        const imageElement = document.querySelector(`img[src="${imageUrl}"]`);
+                        if (!imageElement) {
+                            reject(new Error("Image element not found"));
+                            return;
+                        }
+
+                        const response = await fetch(imageUrl);
+                        const blob = await response.blob();
+                        const arrayBuffer = await blob.arrayBuffer();
+
+                        let binary = "";
+                        const bytes = new Uint8Array(arrayBuffer);
+                        const len = bytes.byteLength;
+                        for (let i = 0; i < len; i++) {
+                            binary += String.fromCharCode(bytes[i]);
+                        }
+                        const base64Data = `data:${blob.type};base64,${window.btoa(binary)}`;
+
+                        const img = new Image();
+                        img.onload = function () {
+                            const canvas = document.createElement("canvas");
+                            const ctx = canvas.getContext("2d");
+
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+
+                            ctx.drawImage(img, 0, 0);
+
+                            const compressedImage = canvas.toDataURL("image/jpeg", 0.7);
+                            resolve(compressedImage);
+                        };
+                        img.src = base64Data;
+                    });
+                },
+                args: [info]
+            })
+                .then(async injectionResults => {
+                    if (chrome.runtime.lastError) {
+                        showErrorNotification("An error occured", false)
+                    } else {
+                        for (const frameResult of injectionResults) {
+                            if (frameResult.result) {
+                                await initGenerateAltText(frameResult.result, info.srcUrl);
+                            } else {
+                                showErrorNotification("An error occured", false)
+                            }
+                        }
+                    }
+                });
+        }
+
     }
 });
+
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === "closeOffscreen") {
