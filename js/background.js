@@ -149,67 +149,11 @@ chrome.contextMenus.create({
 
 chrome.contextMenus.onClicked.addListener(async function (info, tab) {
     if (info.menuItemId === "generate-alt-text") {
-        const executeScriptOptions = {
-            code: `(${async (info) => {
-                return new Promise(async (resolve, reject) => {
-
-                    const imageUrl = info.srcUrl;
-                    const imageElement = document.querySelector(`img[src="${imageUrl}"]`);
-                    if (!imageElement) {
-                        reject(new Error("Image element not found"));
-                        return;
-                    }
-
-                    const response = await fetch(imageUrl);
-                    const blob = await response.blob();
-                    const arrayBuffer = await blob.arrayBuffer();
-
-                    let binary = "";
-                    const bytes = new Uint8Array(arrayBuffer);
-                    const len = bytes.byteLength;
-                    for (let i = 0; i < len; i++) {
-                        binary += String.fromCharCode(bytes[i]);
-                    }
-                    const base64Data = `data:${blob.type};base64,${window.btoa(binary)}`;
-
-                    const img = new Image();
-                    img.onload = function () {
-                        const canvas = document.createElement("canvas");
-                        const ctx = canvas.getContext("2d");
-
-                        canvas.width = img.width;
-                        canvas.height = img.height;
-
-                        ctx.drawImage(img, 0, 0);
-
-                        const compressedImage = canvas.toDataURL("image/jpeg", 0.7);
-                        resolve(compressedImage);
-                    };
-                    img.src = base64Data;
-                });
-            }})(${JSON.stringify(info)})`
-        };
-
-
-        if (isFirefox) {
-            browser.tabs.executeScript(tab.id, executeScriptOptions)
-                .then(async injectionResults => {
-                    if (chrome.runtime.lastError) {
-                        showErrorNotification("An error occured", false)
-                    } else {
-                        const result = injectionResults[0];
-                        if (result) {
-                            await initGenerateAltText(result, info.srcUrl);
-                        } else {
-                            showErrorNotification("An error occured", false)
-                        }
-                    }
-                });
-        } else {
-            chrome.scripting.executeScript({
-                target: {tabId: tab.id, allFrames: true},
-                func: async (info) => {
+        if (info.srcUrl.startsWith("blob:")) {
+            const executeScriptOptions = {
+                code: `(${async (info) => {
                     return new Promise(async (resolve, reject) => {
+
                         const imageUrl = info.srcUrl;
                         const imageElement = document.querySelector(`img[src="${imageUrl}"]`);
                         if (!imageElement) {
@@ -244,24 +188,83 @@ chrome.contextMenus.onClicked.addListener(async function (info, tab) {
                         };
                         img.src = base64Data;
                     });
-                },
-                args: [info]
-            })
-                .then(async injectionResults => {
-                    if (chrome.runtime.lastError) {
-                        showErrorNotification("An error occured", false)
-                    } else {
-                        for (const frameResult of injectionResults) {
-                            if (frameResult.result) {
-                                await initGenerateAltText(frameResult.result, info.srcUrl);
+                }})(${JSON.stringify(info)})`
+            };
+
+
+            if (isFirefox) {
+                browser.tabs.executeScript(tab.id, executeScriptOptions)
+                    .then(async injectionResults => {
+                        if (chrome.runtime.lastError) {
+                            showErrorNotification("An error occured", false)
+                        } else {
+                            const result = injectionResults[0];
+                            if (result) {
+                                await initGenerateAltText(result, info.srcUrl);
                             } else {
                                 showErrorNotification("An error occured", false)
                             }
                         }
-                    }
-                });
-        }
+                    });
+            } else {
+                chrome.scripting.executeScript({
+                    target: {tabId: tab.id, allFrames: true},
+                    func: async (info) => {
+                        return new Promise(async (resolve, reject) => {
+                            const imageUrl = info.srcUrl;
+                            const imageElement = document.querySelector(`img[src="${imageUrl}"]`);
+                            if (!imageElement) {
+                                reject(new Error("Image element not found"));
+                                return;
+                            }
 
+                            const response = await fetch(imageUrl);
+                            const blob = await response.blob();
+                            const arrayBuffer = await blob.arrayBuffer();
+
+                            let binary = "";
+                            const bytes = new Uint8Array(arrayBuffer);
+                            const len = bytes.byteLength;
+                            for (let i = 0; i < len; i++) {
+                                binary += String.fromCharCode(bytes[i]);
+                            }
+                            const base64Data = `data:${blob.type};base64,${window.btoa(binary)}`;
+
+                            const img = new Image();
+                            img.onload = function () {
+                                const canvas = document.createElement("canvas");
+                                const ctx = canvas.getContext("2d");
+
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+
+                                ctx.drawImage(img, 0, 0);
+
+                                const compressedImage = canvas.toDataURL("image/jpeg", 0.7);
+                                resolve(compressedImage);
+                            };
+                            img.src = base64Data;
+                        });
+                    },
+                    args: [info]
+                })
+                    .then(async injectionResults => {
+                        if (chrome.runtime.lastError) {
+                            showErrorNotification("An error occured", false)
+                        } else {
+                            for (const frameResult of injectionResults) {
+                                if (frameResult.result) {
+                                    await initGenerateAltText(frameResult.result, info.srcUrl);
+                                } else {
+                                    showErrorNotification("An error occured", false)
+                                }
+                            }
+                        }
+                    });
+            }
+        } else {
+            await initGenerateAltText(info.srcUrl, null);
+        }
     }
 });
 
